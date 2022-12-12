@@ -1,23 +1,30 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
+import { Bet } from "./bet";
 import { Params } from "./params";
 
 export const protobufPackage = "lottery.lottery";
 
 /** GenesisState defines the lottery module's genesis state. */
 export interface GenesisState {
+  params:
+    | Params
+    | undefined;
   /** this line is used by starport scaffolding # genesis/proto/state */
-  params: Params | undefined;
+  betList: Bet[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined };
+  return { params: undefined, betList: [] };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.betList) {
+      Bet.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -32,6 +39,9 @@ export const GenesisState = {
         case 1:
           message.params = Params.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.betList.push(Bet.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -41,12 +51,20 @@ export const GenesisState = {
   },
 
   fromJSON(object: any): GenesisState {
-    return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      betList: Array.isArray(object?.betList) ? object.betList.map((e: any) => Bet.fromJSON(e)) : [],
+    };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.betList) {
+      obj.betList = message.betList.map((e) => e ? Bet.toJSON(e) : undefined);
+    } else {
+      obj.betList = [];
+    }
     return obj;
   },
 
@@ -55,6 +73,7 @@ export const GenesisState = {
     message.params = (object.params !== undefined && object.params !== null)
       ? Params.fromPartial(object.params)
       : undefined;
+    message.betList = object.betList?.map((e) => Bet.fromPartial(e)) || [];
     return message;
   },
 };

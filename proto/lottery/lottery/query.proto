@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "lottery/lottery/params.proto";
+import "lottery/lottery/bet.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "lottery/x/lottery/types";
@@ -15,7 +16,17 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/lottery/lottery/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a Bet by index.
+	rpc Bet(QueryGetBetRequest) returns (QueryGetBetResponse) {
+		option (google.api.http).get = "/lottery/lottery/bet/{index}";
+	}
+
+	// Queries a list of Bet items.
+	rpc BetAll(QueryAllBetRequest) returns (QueryAllBetResponse) {
+		option (google.api.http).get = "/lottery/lottery/bet";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +36,24 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetBetRequest {
+	  string index = 1;
+
+}
+
+message QueryGetBetResponse {
+	Bet bet = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBetRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBetResponse {
+	repeated Bet bet = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3
