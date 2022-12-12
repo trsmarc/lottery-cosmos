@@ -1,8 +1,10 @@
 // THIS FILE IS GENERATED AUTOMATICALLY. DO NOT MODIFY.
 
+import LotteryLottery from './lottery.lottery'
 
 
 export default { 
+  LotteryLottery: load(LotteryLottery, 'lottery.lottery'),
   
 }
 
