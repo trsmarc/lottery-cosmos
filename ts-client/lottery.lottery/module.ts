@@ -7,10 +7,21 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgBuyLottery } from "./types/lottery/lottery/tx";
 
 
-export {  };
+export { MsgBuyLottery };
 
+type sendMsgBuyLotteryParams = {
+  value: MsgBuyLottery,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgBuyLotteryParams = {
+  value: MsgBuyLottery,
+};
 
 
 export const registry = new Registry(msgTypes);
@@ -30,6 +41,28 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgBuyLottery({ value, fee, memo }: sendMsgBuyLotteryParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgBuyLottery: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgBuyLottery({ value: MsgBuyLottery.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgBuyLottery: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgBuyLottery({ value }: msgBuyLotteryParams): EncodeObject {
+			try {
+				return { typeUrl: "/lottery.lottery.MsgBuyLottery", value: MsgBuyLottery.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgBuyLottery: Could not create message: ' + e.message)
+			}
+		},
 		
 	}
 };
