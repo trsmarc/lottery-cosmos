@@ -1,11 +1,85 @@
 version: 1
 accounts:
-  - name: alice
-    coins: ["20000token", "200000000stake"]
-  - name: bob
-    coins: ["10000token", "100000000stake"]
+  - name: client1
+    coins: ["500token", "100000000stake"]
+  - name: client2
+    coins: ["500token", "100000000stake"]
+  - name: client3
+    coins: ["500token", "100000000stake"]
+  - name: client4
+    coins: ["500token", "100000000stake"]
+  - name: client5
+    coins: ["500token", "100000000stake"]
+  - name: client6
+    coins: ["500token", "100000000stake"]
+  - name: client7
+    coins: ["500token", "100000000stake"]
+  - name: client8
+    coins: ["500token", "100000000stake"]
+  - name: client9
+    coins: ["500token", "100000000stake"]
+  - name: client10
+    coins: ["500token", "100000000stake"]
+  - name: client11
+    coins: ["500token", "100000000stake"]
+  - name: client12
+    coins: ["500token", "100000000stake"]
+  - name: client13
+    coins: ["500token", "100000000stake"]
+  - name: client14
+    coins: ["500token", "100000000stake"]
+  - name: client15
+    coins: ["500token", "100000000stake"]
+  - name: client16
+    coins: ["500token", "100000000stake"]
+  - name: client17
+    coins: ["500token", "100000000stake"]
+  - name: client18
+    coins: ["500token", "100000000stake"]
+  - name: client19
+    coins: ["500token", "100000000stake"]
+  - name: client20
+    coins: ["500token", "100000000stake"]
 validators:
-  - name: alice
+  - name: client1
+    bonded: "100000000stake"
+  - name: client2
+    bonded: "100000000stake"
+  - name: client3
+    bonded: "100000000stake"
+  - name: client4
+    bonded: "100000000stake"
+  - name: client5
+    bonded: "100000000stake"
+  - name: client6
+    bonded: "100000000stake"
+  - name: client7
+    bonded: "100000000stake"
+  - name: client8
+    bonded: "100000000stake"
+  - name: client9
+    bonded: "100000000stake"
+  - name: client10
+    bonded: "100000000stake"
+  - name: client11
+    bonded: "100000000stake"
+  - name: client12
+    bonded: "100000000stake"
+  - name: client13
+    bonded: "100000000stake"
+  - name: client14
+    bonded: "100000000stake"
+  - name: client15
+    bonded: "100000000stake"
+  - name: client16
+    bonded: "100000000stake"
+  - name: client17
+    bonded: "100000000stake"
+  - name: client18
+    bonded: "100000000stake"
+  - name: client19
+    bonded: "100000000stake"
+  - name: client20
     bonded: "100000000stake"
 client:
   openapi:
@@ -14,6 +88,3 @@ client:
     path: "ts-client"
   vuex:
     path: "vue/src/store"
-faucet:
-  name: bob
-  coins: ["5token", "100000stake"]

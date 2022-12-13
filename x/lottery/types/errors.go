@@ -8,5 +8,6 @@ import (
 
 // x/lottery module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrInvalidLotteryFee = sdkerrors.Register(ModuleName, 1100, "Lottery fee is %s received %s")
+	ErrInvalidBetSize    = sdkerrors.Register(ModuleName, 1101, "Bet size can be %s to %s received %s")
 )

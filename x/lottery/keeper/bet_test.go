@@ -4,12 +4,13 @@ import (
 	"strconv"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
 	keepertest "lottery/testutil/keeper"
 	"lottery/testutil/nullify"
 	"lottery/x/lottery/keeper"
 	"lottery/x/lottery/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 // Prevent strconv unused error
@@ -26,7 +27,7 @@ func createNBet(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Bet {
 }
 
 func TestBetGet(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
+	keeper, ctx, _ := keepertest.LotteryKeeper(t)
 	items := createNBet(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetBet(ctx,
@@ -40,7 +41,7 @@ func TestBetGet(t *testing.T) {
 	}
 }
 func TestBetRemove(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
+	keeper, ctx, _ := keepertest.LotteryKeeper(t)
 	items := createNBet(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveBet(ctx,
@@ -54,7 +55,7 @@ func TestBetRemove(t *testing.T) {
 }
 
 func TestBetGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
+	keeper, ctx, _ := keepertest.LotteryKeeper(t)
 	items := createNBet(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),

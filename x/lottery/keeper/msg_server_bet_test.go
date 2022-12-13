@@ -17,7 +17,7 @@ import (
 var _ = strconv.IntSize
 
 func TestBetMsgServerCreate(t *testing.T) {
-	k, ctx := keepertest.LotteryKeeper(t)
+	k, ctx, _ := keepertest.LotteryKeeper(t)
 	srv := keeper.NewMsgServerImpl(*k)
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "A"
@@ -65,7 +65,7 @@ func TestBetMsgServerUpdate(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, ctx := keepertest.LotteryKeeper(t)
+			k, ctx, _ := keepertest.LotteryKeeper(t)
 			srv := keeper.NewMsgServerImpl(*k)
 			wctx := sdk.WrapSDKContext(ctx)
 			expected := &types.MsgCreateBet{Creator: creator,
@@ -119,7 +119,7 @@ func TestBetMsgServerDelete(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, ctx := keepertest.LotteryKeeper(t)
+			k, ctx, _ := keepertest.LotteryKeeper(t)
 			srv := keeper.NewMsgServerImpl(*k)
 			wctx := sdk.WrapSDKContext(ctx)
 

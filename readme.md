@@ -25,6 +25,13 @@ npm run serve
 
 The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
 
+## Contribute
+
+Generate mocks for keepers
+```
+mockgen -source=x/lottery/types/expected_keepers.go -package testutil -destination testutil/mocks/expected_keepers_mock.go
+```
+
 
 ## Usage
 
@@ -34,7 +41,7 @@ Command:
 lotteryd tx lottery buy-lottery <fee> <bet-size> --from <account-name>
 
 Example:
-lotteryd tx lottery buy-lottery 5token 20token --from alice
+lotteryd tx lottery buy-lottery 5token 20token --from client1
 ```
 
 Query token balance
@@ -44,7 +51,7 @@ Command:
 lotteryd q bank balances $(lotteryd keys show <account-name> -a)
 
 Example:
-lotteryd q bank balances $(lotteryd keys show alice -a)
+lotteryd q bank balances $(lotteryd keys show client1 -a)
 ```
 
 Query lottery bet
