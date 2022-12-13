@@ -1,5 +1,5 @@
-# lottery
-**lottery** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
+# Lottery Chain
+**Lottery chain** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
 
 ## Get started
 
@@ -25,28 +25,35 @@ npm run serve
 
 The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
 
-## Release
-To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
 
+## Usage
+
+Buy lottery
 ```
-git tag v0.1
-git push origin v0.1
+Command:
+lotteryd tx lottery buy-lottery <fee> <bet-size> --from <account-name>
+
+Example:
+lotteryd tx lottery buy-lottery 5token 20token --from alice
 ```
 
-After a draft release is created, make your final changes from the release page and publish it.
-
-### Install
-To install the latest version of your blockchain node's binary, execute the following command on your machine:
-
+Query token balance
 ```
-curl https://get.ignite.com/username/lottery@latest! | sudo bash
+
+Command:
+lotteryd q bank balances $(lotteryd keys show <account-name> -a)
+
+Example:
+lotteryd q bank balances $(lotteryd keys show alice -a)
 ```
-`username/lottery` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
 
-## Learn more
+Query lottery bet
+```
+lotteryd q lottery list-bet
+```
 
-- [Ignite CLI](https://ignite.com/cli)
-- [Tutorials](https://docs.ignite.com/guide)
-- [Ignite CLI docs](https://docs.ignite.com)
-- [Cosmos SDK docs](https://docs.cosmos.network)
-- [Developer Chat](https://discord.gg/ignite)
+Action
+```
+Command:
+Example:
+```

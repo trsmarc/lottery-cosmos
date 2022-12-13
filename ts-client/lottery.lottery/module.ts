@@ -7,13 +7,19 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgCreateBet } from "./types/lottery/lottery/tx";
 import { MsgUpdateBet } from "./types/lottery/lottery/tx";
 import { MsgDeleteBet } from "./types/lottery/lottery/tx";
 import { MsgBuyLottery } from "./types/lottery/lottery/tx";
-import { MsgCreateBet } from "./types/lottery/lottery/tx";
 
 
-export { MsgUpdateBet, MsgDeleteBet, MsgBuyLottery, MsgCreateBet };
+export { MsgCreateBet, MsgUpdateBet, MsgDeleteBet, MsgBuyLottery };
+
+type sendMsgCreateBetParams = {
+  value: MsgCreateBet,
+  fee?: StdFee,
+  memo?: string
+};
 
 type sendMsgUpdateBetParams = {
   value: MsgUpdateBet,
@@ -33,12 +39,10 @@ type sendMsgBuyLotteryParams = {
   memo?: string
 };
 
-type sendMsgCreateBetParams = {
-  value: MsgCreateBet,
-  fee?: StdFee,
-  memo?: string
-};
 
+type msgCreateBetParams = {
+  value: MsgCreateBet,
+};
 
 type msgUpdateBetParams = {
   value: MsgUpdateBet,
@@ -50,10 +54,6 @@ type msgDeleteBetParams = {
 
 type msgBuyLotteryParams = {
   value: MsgBuyLottery,
-};
-
-type msgCreateBetParams = {
-  value: MsgCreateBet,
 };
 
 
@@ -73,6 +73,20 @@ interface TxClientOptions {
 export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "http://localhost:26657", prefix: "cosmos" }) => {
 
   return {
+		
+		async sendMsgCreateBet({ value, fee, memo }: sendMsgCreateBetParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateBet: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCreateBet({ value: MsgCreateBet.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateBet: Could not broadcast Tx: '+ e.message)
+			}
+		},
 		
 		async sendMsgUpdateBet({ value, fee, memo }: sendMsgUpdateBetParams): Promise<DeliverTxResponse> {
 			if (!signer) {
@@ -116,20 +130,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgCreateBet({ value, fee, memo }: sendMsgCreateBetParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateBet: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCreateBet({ value: MsgCreateBet.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+		
+		msgCreateBet({ value }: msgCreateBetParams): EncodeObject {
+			try {
+				return { typeUrl: "/lottery.lottery.MsgCreateBet", value: MsgCreateBet.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateBet: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:MsgCreateBet: Could not create message: ' + e.message)
 			}
 		},
-		
 		
 		msgUpdateBet({ value }: msgUpdateBetParams): EncodeObject {
 			try {
@@ -152,14 +160,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/lottery.lottery.MsgBuyLottery", value: MsgBuyLottery.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgBuyLottery: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgCreateBet({ value }: msgCreateBetParams): EncodeObject {
-			try {
-				return { typeUrl: "/lottery.lottery.MsgCreateBet", value: MsgCreateBet.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateBet: Could not create message: ' + e.message)
 			}
 		},
 		
