@@ -1,9 +1,10 @@
 package types
 
 const (
-	LotteryFee = 5
-	MinimumBet = 1
-	MaximumBet = 100
+	LotteryFee          = 5
+	MinimumBet          = 1
+	MaximumBet          = 100
+	LotteryBetThreshold = 10
 )
 
 const (

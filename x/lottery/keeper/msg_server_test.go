@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	keepertest "lottery/testutil/keeper"
+	keeper_test "lottery/testutil/keeper"
 	"lottery/x/lottery/keeper"
 	"lottery/x/lottery/types"
 
@@ -14,6 +14,6 @@ import (
 )
 
 func setupMsgServer(t testing.TB) (types.MsgServer, context.Context, *mock.MockBankKeeper) {
-	k, ctx, bankKeeper := keepertest.LotteryKeeper(t)
+	k, ctx, bankKeeper := keeper_test.LotteryKeeper(t)
 	return keeper.NewMsgServerImpl(*k), sdk.WrapSDKContext(ctx), bankKeeper
 }

@@ -2,33 +2,22 @@ package keeper_test
 
 import (
 	test_constant "lottery/testutil/constants"
-	test_keeper "lottery/testutil/keeper"
-	test_mock "lottery/testutil/mocks"
+	keeper_test "lottery/testutil/keeper"
 	"lottery/x/lottery/types"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 )
 
-type KeeperTestSuite struct {
-	suite.Suite
-
-	acctKeeper *test_mock.MockAccountKeeper
-	bankKeeper *test_mock.MockBankKeeper
-}
-
-const (
+var (
 	c1 = test_constant.Client1
-	c2 = test_constant.Client2
-	c3 = test_constant.Client3
 )
 
 func TestBuyLottery_Success(t *testing.T) {
 	msgServer, context, bankKeeper := setupMsgServer(t)
-	test_keeper.TrackMockBalances(bankKeeper)
+	keeper_test.TrackMockBalances(bankKeeper)
 	ctx := sdk.UnwrapSDKContext(context)
 
 	initialCoins := sdk.Coins{sdk.NewInt64Coin("token", 6)}
@@ -59,7 +48,7 @@ func TestBuyLottery_Success(t *testing.T) {
 
 func TestBuyLottery_InsufficientFund(t *testing.T) {
 	msgServer, context, bankKeeper := setupMsgServer(t)
-	test_keeper.TrackMockBalances(bankKeeper)
+	keeper_test.TrackMockBalances(bankKeeper)
 	ctx := sdk.UnwrapSDKContext(context)
 
 	initialCoins := sdk.Coins{sdk.NewInt64Coin("token", 5)}
@@ -102,7 +91,6 @@ func TestBuyLottery_FailedMinimumBet(t *testing.T) {
 
 func TestBuyLottery_FailedMaximumBet(t *testing.T) {
 	msgServer, context, _ := setupMsgServer(t)
-
 	_, err := msgServer.BuyLottery(context, &types.MsgBuyLottery{
 		Creator: c1,
 		BetSize: "101token",

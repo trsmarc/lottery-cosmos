@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	// this line is used by starport scaffolding # 1
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -11,14 +12,15 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	"lottery/x/lottery/client/cli"
+	"lottery/x/lottery/keeper"
+	"lottery/x/lottery/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"lottery/x/lottery/client/cli"
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
 )
 
 var (
@@ -154,6 +156,7 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
-func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+	am.keeper.SelectLotteryWinner(sdk.WrapSDKContext(ctx))
 	return []abci.ValidatorUpdate{}
 }

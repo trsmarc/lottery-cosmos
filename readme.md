@@ -44,7 +44,7 @@ Example:
 lotteryd tx lottery buy-lottery 5token 20token --from client1
 ```
 
-Query token balance
+Query token balance of a client
 ```
 
 Command:
