@@ -7,16 +7,16 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgCreateBet } from "./types/lottery/lottery/tx";
+import { MsgBuyLottery } from "./types/lottery/lottery/tx";
 import { MsgUpdateBet } from "./types/lottery/lottery/tx";
 import { MsgDeleteBet } from "./types/lottery/lottery/tx";
-import { MsgBuyLottery } from "./types/lottery/lottery/tx";
+import { MsgCreateBet } from "./types/lottery/lottery/tx";
 
 
-export { MsgCreateBet, MsgUpdateBet, MsgDeleteBet, MsgBuyLottery };
+export { MsgBuyLottery, MsgUpdateBet, MsgDeleteBet, MsgCreateBet };
 
-type sendMsgCreateBetParams = {
-  value: MsgCreateBet,
+type sendMsgBuyLotteryParams = {
+  value: MsgBuyLottery,
   fee?: StdFee,
   memo?: string
 };
@@ -33,15 +33,15 @@ type sendMsgDeleteBetParams = {
   memo?: string
 };
 
-type sendMsgBuyLotteryParams = {
-  value: MsgBuyLottery,
+type sendMsgCreateBetParams = {
+  value: MsgCreateBet,
   fee?: StdFee,
   memo?: string
 };
 
 
-type msgCreateBetParams = {
-  value: MsgCreateBet,
+type msgBuyLotteryParams = {
+  value: MsgBuyLottery,
 };
 
 type msgUpdateBetParams = {
@@ -52,8 +52,8 @@ type msgDeleteBetParams = {
   value: MsgDeleteBet,
 };
 
-type msgBuyLotteryParams = {
-  value: MsgBuyLottery,
+type msgCreateBetParams = {
+  value: MsgCreateBet,
 };
 
 
@@ -74,17 +74,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgCreateBet({ value, fee, memo }: sendMsgCreateBetParams): Promise<DeliverTxResponse> {
+		async sendMsgBuyLottery({ value, fee, memo }: sendMsgBuyLotteryParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateBet: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgBuyLottery: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCreateBet({ value: MsgCreateBet.fromPartial(value) })
+				let msg = this.msgBuyLottery({ value: MsgBuyLottery.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateBet: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgBuyLottery: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -116,26 +116,26 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgBuyLottery({ value, fee, memo }: sendMsgBuyLotteryParams): Promise<DeliverTxResponse> {
+		async sendMsgCreateBet({ value, fee, memo }: sendMsgCreateBetParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgBuyLottery: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgCreateBet: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgBuyLottery({ value: MsgBuyLottery.fromPartial(value) })
+				let msg = this.msgCreateBet({ value: MsgCreateBet.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgBuyLottery: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgCreateBet: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
 		
-		msgCreateBet({ value }: msgCreateBetParams): EncodeObject {
+		msgBuyLottery({ value }: msgBuyLotteryParams): EncodeObject {
 			try {
-				return { typeUrl: "/lottery.lottery.MsgCreateBet", value: MsgCreateBet.fromPartial( value ) }  
+				return { typeUrl: "/lottery.lottery.MsgBuyLottery", value: MsgBuyLottery.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateBet: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgBuyLottery: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -155,11 +155,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgBuyLottery({ value }: msgBuyLotteryParams): EncodeObject {
+		msgCreateBet({ value }: msgCreateBetParams): EncodeObject {
 			try {
-				return { typeUrl: "/lottery.lottery.MsgBuyLottery", value: MsgBuyLottery.fromPartial( value ) }  
+				return { typeUrl: "/lottery.lottery.MsgCreateBet", value: MsgCreateBet.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgBuyLottery: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgCreateBet: Could not create message: ' + e.message)
 			}
 		},
 		

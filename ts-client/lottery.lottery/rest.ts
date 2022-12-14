@@ -16,6 +16,15 @@ export interface LotteryBet {
   creator?: string;
 }
 
+export interface LotteryLotteryRecord {
+  /** @format uint64 */
+  id?: string;
+  winnerIndex?: string;
+  winnerAddress?: string;
+  winnerType?: string;
+  reward?: string;
+}
+
 export type LotteryMsgBuyLotteryResponse = object;
 
 export type LotteryMsgCreateBetResponse = object;
@@ -44,8 +53,27 @@ export interface LotteryQueryAllBetResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface LotteryQueryAllLotteryRecordResponse {
+  LotteryRecord?: LotteryLotteryRecord[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface LotteryQueryGetBetResponse {
   bet?: LotteryBet;
+}
+
+export interface LotteryQueryGetLotteryRecordResponse {
+  LotteryRecord?: LotteryLotteryRecord;
 }
 
 /**
@@ -301,6 +329,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryBet = (index: string, params: RequestParams = {}) =>
     this.request<LotteryQueryGetBetResponse, RpcStatus>({
       path: `/lottery/lottery/bet/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryLotteryRecordAll
+   * @summary Queries a list of LotteryRecord items.
+   * @request GET:/lottery/lottery/lottery_record
+   */
+  queryLotteryRecordAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<LotteryQueryAllLotteryRecordResponse, RpcStatus>({
+      path: `/lottery/lottery/lottery_record`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryLotteryRecord
+   * @summary Queries a LotteryRecord by id.
+   * @request GET:/lottery/lottery/lottery_record/{id}
+   */
+  queryLotteryRecord = (id: string, params: RequestParams = {}) =>
+    this.request<LotteryQueryGetLotteryRecordResponse, RpcStatus>({
+      path: `/lottery/lottery/lottery_record/${id}`,
       method: "GET",
       format: "json",
       ...params,

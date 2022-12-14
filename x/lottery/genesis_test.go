@@ -3,11 +3,12 @@ package lottery_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
-	keepertest "lottery/testutil/keeper"
+	keeper_test "lottery/testutil/keeper"
 	"lottery/testutil/nullify"
 	"lottery/x/lottery"
 	"lottery/x/lottery/types"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenesis(t *testing.T) {
@@ -22,10 +23,19 @@ func TestGenesis(t *testing.T) {
 				Index: "1",
 			},
 		},
+		LotteryRecordList: []types.LotteryRecord{
+			{
+				Id: 0,
+			},
+			{
+				Id: 1,
+			},
+		},
+		LotteryRecordCount: 2,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, ctx := keepertest.LotteryKeeper(t)
+	k, ctx, _ := keeper_test.LotteryKeeper(t)
 	lottery.InitGenesis(ctx, *k, genesisState)
 	got := lottery.ExportGenesis(ctx, *k)
 	require.NotNil(t, got)
@@ -34,5 +44,7 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(got)
 
 	require.ElementsMatch(t, genesisState.BetList, got.BetList)
+	require.ElementsMatch(t, genesisState.LotteryRecordList, got.LotteryRecordList)
+	require.Equal(t, genesisState.LotteryRecordCount, got.LotteryRecordCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

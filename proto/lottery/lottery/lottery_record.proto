@@ -1,0 +1,13 @@
+syntax = "proto3";
+package lottery.lottery;
+
+option go_package = "lottery/x/lottery/types";
+
+message LotteryRecord {
+  uint64 id = 1;
+  string winnerIndex = 2; 
+  string winnerAddress = 3; 
+  string winnerType = 4; 
+  string reward = 5; 
+  
+}

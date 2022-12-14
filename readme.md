@@ -59,6 +59,11 @@ Query lottery bet
 lotteryd q lottery list-bet
 ```
 
+Query lottery winner record
+```
+lotteryd q lottery list-lottery-record
+```
+
 Action
 ```
 Command:

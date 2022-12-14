@@ -30,6 +30,15 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "1",
 					},
 				},
+				LotteryRecordList: []types.LotteryRecord{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				LotteryRecordCount: 2,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -45,6 +54,32 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "0",
 					},
 				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated lotteryRecord",
+			genState: &types.GenesisState{
+				LotteryRecordList: []types.LotteryRecord{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid lotteryRecord count",
+			genState: &types.GenesisState{
+				LotteryRecordList: []types.LotteryRecord{
+					{
+						Id: 1,
+					},
+				},
+				LotteryRecordCount: 0,
 			},
 			valid: false,
 		},

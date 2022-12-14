@@ -97,5 +97,9 @@ func TestBuyLottery_FailedMaximumBet(t *testing.T) {
 		Fee:     "5token",
 	})
 
-	require.EqualError(t, err, "Bet size can be 1token to 100token received 101token: invalid request")
+	require.EqualError(
+		t,
+		err,
+		"Bet size can be 1token to 100token received 101token: invalid request",
+	)
 }

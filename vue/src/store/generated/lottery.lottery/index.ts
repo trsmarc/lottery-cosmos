@@ -1,10 +1,11 @@
 import { Client, registry, MissingWalletError } from 'lottery-client-ts'
 
 import { Bet } from "lottery-client-ts/lottery.lottery/types"
+import { LotteryRecord } from "lottery-client-ts/lottery.lottery/types"
 import { Params } from "lottery-client-ts/lottery.lottery/types"
 
 
-export { Bet, Params };
+export { Bet, LotteryRecord, Params };
 
 function initClient(vuexGetters) {
 	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
@@ -38,9 +39,12 @@ const getDefaultState = () => {
 				Params: {},
 				Bet: {},
 				BetAll: {},
+				LotteryRecord: {},
+				LotteryRecordAll: {},
 				
 				_Structure: {
 						Bet: getStructure(Bet.fromPartial({})),
+						LotteryRecord: getStructure(LotteryRecord.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						
 		},
@@ -87,6 +91,18 @@ export default {
 						(<any> params).query=null
 					}
 			return state.BetAll[JSON.stringify(params)] ?? {}
+		},
+				getLotteryRecord: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.LotteryRecord[JSON.stringify(params)] ?? {}
+		},
+				getLotteryRecordAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.LotteryRecordAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -192,19 +208,54 @@ export default {
 		},
 		
 		
-		async sendMsgUpdateBet({ rootGetters }, { value, fee = [], memo = '' }) {
+		
+		
+		 		
+		
+		
+		async QueryLotteryRecord({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
 			try {
-				const client=await initClient(rootGetters)
-				const result = await client.LotteryLottery.tx.sendMsgUpdateBet({ value, fee: {amount: fee, gas: "200000"}, memo })
-				return result
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.LotteryLottery.query.queryLotteryRecord( key.id)).data
+				
+					
+				commit('QUERY', { query: 'LotteryRecord', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryLotteryRecord', payload: { options: { all }, params: {...key},query }})
+				return getters['getLotteryRecord']( { params: {...key}, query}) ?? {}
 			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgUpdateBet:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgUpdateBet:Send Could not broadcast Tx: '+ e.message)
-				}
+				throw new Error('QueryClient:QueryLotteryRecord API Node Unavailable. Could not perform query: ' + e.message)
+				
 			}
 		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryLotteryRecordAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.LotteryLottery.query.queryLotteryRecordAll(query ?? undefined)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await client.LotteryLottery.query.queryLotteryRecordAll({...query ?? {}, 'pagination.key':(<any> value).pagination.next_key} as any)).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'LotteryRecordAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryLotteryRecordAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getLotteryRecordAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryLotteryRecordAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
 		async sendMsgCreateBet({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -231,6 +282,19 @@ export default {
 				}
 			}
 		},
+		async sendMsgUpdateBet({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const result = await client.LotteryLottery.tx.sendMsgUpdateBet({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgUpdateBet:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgUpdateBet:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		async sendMsgDeleteBet({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -245,19 +309,6 @@ export default {
 			}
 		},
 		
-		async MsgUpdateBet({ rootGetters }, { value }) {
-			try {
-				const client=initClient(rootGetters)
-				const msg = await client.LotteryLottery.tx.msgUpdateBet({value})
-				return msg
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgUpdateBet:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgUpdateBet:Create Could not create message: ' + e.message)
-				}
-			}
-		},
 		async MsgCreateBet({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)
@@ -281,6 +332,19 @@ export default {
 					throw new Error('TxClient:MsgBuyLottery:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgBuyLottery:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgUpdateBet({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.LotteryLottery.tx.msgUpdateBet({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgUpdateBet:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgUpdateBet:Create Could not create message: ' + e.message)
 				}
 			}
 		},
