@@ -17,6 +17,7 @@ import (
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	tmdb "github.com/tendermint/tm-db"
@@ -64,26 +65,36 @@ func LotteryKeeper(t testing.TB) (*keeper.Keeper, sdk.Context, *mock.MockBankKee
 // locally tracks accounts balances (not modules balances).
 func TrackMockBalances(bankKeeper *mock.MockBankKeeper) {
 	balances := make(map[string]sdk.Coins)
-
-	// We don't track module account balances.
-	bankKeeper.EXPECT().MintCoins(gomock.Any(), minttypes.ModuleName, gomock.Any()).AnyTimes()
-	bankKeeper.EXPECT().BurnCoins(gomock.Any(), types.ModuleName, gomock.Any()).AnyTimes()
-	bankKeeper.EXPECT().SendCoinsFromModuleToModule(gomock.Any(), minttypes.ModuleName, types.ModuleName, gomock.Any()).AnyTimes()
-
-	// But we do track normal account balances.
-	bankKeeper.EXPECT().SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.ModuleName, gomock.Any()).DoAndReturn(func(_ sdk.Context, sender sdk.AccAddress, _ string, coins sdk.Coins) error {
-		newBalance, negative := balances[sender.String()].SafeSub(coins...)
-		if negative {
-			return fmt.Errorf("not enough balance")
-		}
-		balances[sender.String()] = newBalance
-		return nil
-	}).AnyTimes()
-	bankKeeper.EXPECT().SendCoinsFromModuleToAccount(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).DoAndReturn(func(_ sdk.Context, module string, rcpt sdk.AccAddress, coins sdk.Coins) error {
-		balances[rcpt.String()] = balances[rcpt.String()].Add(coins...)
-		return nil
-	}).AnyTimes()
-	bankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).DoAndReturn(func(_ sdk.Context, addr sdk.AccAddress) sdk.Coins {
-		return balances[addr.String()]
-	}).AnyTimes()
+	moduleAcct := sdk.AccAddress(crypto.AddressHash([]byte(types.ModuleName)))
+	bankKeeper.EXPECT().
+		MintCoins(gomock.Any(), minttypes.ModuleName, gomock.Any()).
+		DoAndReturn(func(_ sdk.Context, module string, coins sdk.Coins) error {
+			balances[moduleAcct.String()] = balances[moduleAcct.String()].Add(coins...)
+			return nil
+		}).
+		AnyTimes()
+	bankKeeper.EXPECT().
+		SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.ModuleName, gomock.Any()).
+		DoAndReturn(func(_ sdk.Context, sender sdk.AccAddress, _ string, coins sdk.Coins) error {
+			newBalance, negative := balances[sender.String()].SafeSub(coins...)
+			if negative {
+				return fmt.Errorf("not enough balance")
+			}
+			balances[sender.String()] = newBalance
+			return nil
+		}).
+		AnyTimes()
+	bankKeeper.EXPECT().
+		SendCoinsFromModuleToAccount(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+		DoAndReturn(func(_ sdk.Context, module string, rcpt sdk.AccAddress, coins sdk.Coins) error {
+			balances[rcpt.String()] = balances[rcpt.String()].Add(coins...)
+			return nil
+		}).
+		AnyTimes()
+	bankKeeper.EXPECT().
+		GetAllBalances(gomock.Any(), gomock.Any()).
+		DoAndReturn(func(_ sdk.Context, addr sdk.AccAddress) sdk.Coins {
+			return balances[addr.String()]
+		}).
+		AnyTimes()
 }

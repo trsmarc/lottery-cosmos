@@ -19,12 +19,12 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 	txCount := uint32(len(bets))
 
 	var betTxs string
-	var betArray []string
-	var cyclePool sdk.Coins
+	var cyclePoolReward sdk.Coins
 	var highestBet sdk.Coins
 	var lowestBet sdk.Coins
 	var isProposerIncluded bool
 
+	betIndexes := make(map[string]string, len(bets))
 	proposerAddr := string(ctx.BlockHeader().ProposerAddress[:])
 
 	for {
@@ -37,15 +37,19 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 			if bet.Creator == proposerAddr {
 				isProposerIncluded = true
 				ctx.EventManager().EmitEvent(
-					sdk.NewEvent(types.SelectLotteryWinnerEventType,
-						sdk.NewAttribute(types.SelectLotteryWinnerEventProposer, string(proposerAddr[:])),
+					sdk.NewEvent(
+						types.SelectLotteryWinnerEventType,
+						sdk.NewAttribute(
+							types.SelectLotteryWinnerEventProposer,
+							string(proposerAddr[:]),
+						),
 						sdk.NewAttribute(types.SelectLotteryWinnerEventBetCreator, bet.Creator),
 					),
 				)
 				break
 			}
 
-			betArray = append(betArray, bet.Creator)
+			betIndexes[bet.BetIndex] = bet.Creator
 			betSize, err := sdk.ParseCoinsNormalized(bet.BetSize)
 			if err != nil {
 				panic(err)
@@ -59,7 +63,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 				lowestBet = betSize
 			}
 
-			cyclePool.Add(betSize...)
+			cyclePoolReward = cyclePoolReward.Add(betSize...)
 		}
 
 		if isProposerIncluded {
@@ -69,7 +73,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 		hashBytes := sha256.Sum256([]byte(betTxs))
 		hashInt := binary.BigEndian.Uint32(hashBytes[:])
 		winnerIndex := int((hashInt ^ 0xFFFF) % txCount)
-		winnerAddr := betArray[winnerIndex]
+		winnerAddr := betIndexes[strconv.Itoa(winnerIndex)]
 
 		winner, err := sdk.AccAddressFromBech32(winnerAddr)
 		if err != nil {
@@ -88,21 +92,34 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 		var winnerType string
 
 		if winnerBetSize.IsEqual(highestBet) {
-			reward.Add(k.bankKeeper.SpendableCoins(ctx, moduleAcct)...)
 			winnerType = types.HighestBetWin
+			moduleBalance := k.bankKeeper.GetAllBalances(ctx, moduleAcct)
+			reward = reward.Add(moduleBalance...)
 		} else if winnerBetSize.IsEqual(lowestBet) {
 			winnerType = types.LowestBetWin
 		} else {
-			reward.Add(cyclePool...)
 			winnerType = types.NormalBetWin
+			reward = reward.Add(cyclePoolReward...)
 		}
 
-		if !reward.Empty() {
-			sdkError := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, winner, reward)
+		if winnerType != types.LowestBetWin {
+			sdkError := k.bankKeeper.SendCoinsFromModuleToAccount(
+				ctx,
+				types.ModuleName,
+				winner,
+				reward,
+			)
 			if sdkError != nil {
 				panic(sdkError)
 			}
 		}
+
+		k.SetLotteryRecord(ctx, types.LotteryRecord{
+			WinnerIndex:   winnerIndexStr,
+			WinnerAddress: winnerAddr,
+			WinnerType:    winnerType,
+			Reward:        reward.String(),
+		})
 
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(types.SelectLotteryWinnerEventType,
