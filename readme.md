@@ -35,6 +35,11 @@ mockgen -source=x/lottery/types/expected_keepers.go -package testutil -destinati
 
 ## Usage
 
+Start a blockchain node in development
+```
+ignite chain serve
+```
+
 Buy lottery
 ```
 Command:
@@ -68,4 +73,13 @@ Action
 ```
 Command:
 Example:
+```
+
+## Build
+
+Build using docker
+```
+// The node image
+docker run --rm -it -v $(pwd):/lottery -w /lottery golang:1.19 make build-with-checksum
+docker build -f Dockerfile-ubuntu-prod . -t lotteryd_i
 ```
