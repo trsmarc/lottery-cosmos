@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
-	test_constant "lottery/testutil/constants"
-	keeper_test "lottery/testutil/keeper"
-	"lottery/x/lottery/types"
+	test_constant "github.com/marktrs/lottery-chain-ignite/testutil/constants"
+	keeper_test "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"

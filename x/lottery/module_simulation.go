@@ -9,9 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"lottery/testutil/sample"
-	lotterysimulation "lottery/x/lottery/simulation"
-	"lottery/x/lottery/types"
+	"github.com/marktrs/lottery-chain-ignite/testutil/sample"
+	lotterysimulation "github.com/marktrs/lottery-chain-ignite/x/lottery/simulation"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 )
 
 // avoid unused import issue

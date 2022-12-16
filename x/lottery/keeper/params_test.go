@@ -3,8 +3,8 @@ package keeper_test
 import (
 	"testing"
 
-	testkeeper "lottery/testutil/keeper"
-	"lottery/x/lottery/types"
+	testkeeper "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	"github.com/stretchr/testify/require"
 )

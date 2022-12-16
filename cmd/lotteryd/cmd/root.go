@@ -36,8 +36,8 @@ import (
 	dbm "github.com/tendermint/tm-db"
 	// this line is used by starport scaffolding # root/moduleImport
 
-	"lottery/app"
-	appparams "lottery/app/params"
+	"github.com/marktrs/lottery-chain-ignite/app"
+	appparams "github.com/marktrs/lottery-chain-ignite/app/params"
 )
 
 // NewRootCmd creates a new root command for a Cosmos SDK application

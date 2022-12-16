@@ -10,7 +10,7 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"lottery/x/lottery/types"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

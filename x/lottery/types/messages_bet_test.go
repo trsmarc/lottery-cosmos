@@ -5,7 +5,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
-	"lottery/testutil/sample"
+	"github.com/marktrs/lottery-chain-ignite/testutil/sample"
 )
 
 func TestMsgCreateBet_ValidateBasic(t *testing.T) {

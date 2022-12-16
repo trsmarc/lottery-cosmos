@@ -104,13 +104,13 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	lotterymodule "lottery/x/lottery"
-	lotterymodulekeeper "lottery/x/lottery/keeper"
-	lotterymoduletypes "lottery/x/lottery/types"
+	lotterymodule "github.com/marktrs/lottery-chain-ignite/x/lottery"
+	lotterymodulekeeper "github.com/marktrs/lottery-chain-ignite/x/lottery/keeper"
+	lotterymoduletypes "github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	appparams "lottery/app/params"
-	"lottery/docs"
+	appparams "github.com/marktrs/lottery-chain-ignite/app/params"
+	"github.com/marktrs/lottery-chain-ignite/docs"
 )
 
 const (

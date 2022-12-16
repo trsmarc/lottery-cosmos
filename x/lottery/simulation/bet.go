@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"strconv"
 
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"

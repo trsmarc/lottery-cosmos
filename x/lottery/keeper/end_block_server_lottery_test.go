@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"testing"
 
-	keeper_test "lottery/testutil/keeper"
-	"lottery/x/lottery/types"
+	keeper_test "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"

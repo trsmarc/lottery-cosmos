@@ -10,9 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "lottery/testutil/keeper"
-	"lottery/testutil/nullify"
-	"lottery/x/lottery/types"
+	keepertest "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/testutil/nullify"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 )
 
 // Prevent strconv unused error

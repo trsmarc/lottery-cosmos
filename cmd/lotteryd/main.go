@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"lottery/app"
-	"lottery/cmd/lotteryd/cmd"
+	"github.com/marktrs/lottery-chain-ignite/app"
+	"github.com/marktrs/lottery-chain-ignite/cmd/lotteryd/cmd"
 )
 
 func main() {

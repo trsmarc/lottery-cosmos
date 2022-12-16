@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 	"encoding/binary"
-	"lottery/x/lottery/types"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 	"strconv"
 
 	"crypto/sha256"

@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"testing"
 
-	keepertest "lottery/testutil/keeper"
-	"lottery/testutil/nullify"
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
+	keepertest "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/testutil/nullify"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"

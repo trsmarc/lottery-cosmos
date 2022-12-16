@@ -9,7 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"lottery/x/lottery/types"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 )
 
 func (k Keeper) LotteryRecordAll(c context.Context, req *types.QueryAllLotteryRecordRequest) (*types.QueryAllLotteryRecordResponse, error) {

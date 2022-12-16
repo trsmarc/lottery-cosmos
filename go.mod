@@ -1,4 +1,4 @@
-module lottery
+module github.com/marktrs/lottery-chain-ignite
 
 go 1.18
 

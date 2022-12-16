@@ -3,8 +3,8 @@ package simulation
 import (
 	"math/rand"
 
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"

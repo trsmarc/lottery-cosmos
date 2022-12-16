@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	mock "lottery/testutil/mocks"
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
+	mock "github.com/marktrs/lottery-chain-ignite/testutil/mocks"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"

@@ -12,8 +12,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
-	"lottery/testutil/network"
-	"lottery/x/lottery/client/cli"
+	"github.com/marktrs/lottery-chain-ignite/testutil/network"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/client/cli"
 )
 
 // Prevent strconv unused error

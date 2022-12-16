@@ -3,7 +3,7 @@ package cmd
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"lottery/app"
+	"github.com/marktrs/lottery-chain-ignite/app"
 )
 
 func initSDKConfig() {

@@ -3,10 +3,10 @@ package lottery_test
 import (
 	"testing"
 
-	keeper_test "lottery/testutil/keeper"
-	"lottery/testutil/nullify"
-	"lottery/x/lottery"
-	"lottery/x/lottery/types"
+	keeper_test "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/testutil/nullify"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	"github.com/stretchr/testify/require"
 )

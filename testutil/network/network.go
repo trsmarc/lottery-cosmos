@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"lottery/app"
+	"github.com/marktrs/lottery-chain-ignite/app"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"

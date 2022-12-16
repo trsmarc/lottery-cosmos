@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
-	keeper_test "lottery/testutil/keeper"
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
+	keeper_test "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/keeper"
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
-	mock "lottery/testutil/mocks"
+	mock "github.com/marktrs/lottery-chain-ignite/testutil/mocks"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
