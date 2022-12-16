@@ -4,13 +4,14 @@ import (
 	"math/rand"
 	"strconv"
 
+	"lottery/x/lottery/keeper"
+	"lottery/x/lottery/types"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"lottery/x/lottery/keeper"
-	"lottery/x/lottery/types"
 )
 
 // Prevent strconv unused error
@@ -26,9 +27,17 @@ func SimulateMsgCreateBet(
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 
 		i := r.Int()
+		bets := k.GetAllBet(ctx)
+		bet, err := sdk.ParseCoinsNormalized(strconv.Itoa(i + 1))
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, "", "Parsing bet size error"), nil, nil
+		}
+
 		msg := &types.MsgCreateBet{
-			Creator: simAccount.Address.String(),
-			Index:   strconv.Itoa(i),
+			Creator:  simAccount.Address.String(),
+			Index:    strconv.Itoa(i),
+			BetIndex: strconv.Itoa(len(bets)),
+			BetSize:  bet.String(),
 		}
 
 		_, found := k.GetBet(ctx, msg.Index)
