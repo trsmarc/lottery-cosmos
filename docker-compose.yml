@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  lottery_node_validator:
+    container_name: lottery_node_validator
+    image: "lotteryd_i"
+    command: start
+    volumes:
+      - ./docker/validator:/root/.lottery
