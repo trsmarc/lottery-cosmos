@@ -4,3 +4,9 @@ release/
 .idea/
 .vscode/
 .DS_Store
+
+
+build/
+docker/*/config/addrbook.json
+docker/*/config/write-file-atomic-*
+docker/*/data/*

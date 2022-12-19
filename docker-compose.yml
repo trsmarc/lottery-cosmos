@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  lottery_node_validator:
+    container_name: lottery_node_validator
+    image: "lotteryd_i"
+    command: start
+    ports:
+      - "26656-26657:26656-26657"
+      - "1317:1317"
+      - "9090:9090"
+      - "2345:2345"
+    volumes:
+      - ./docker/validator:/root/.lottery
