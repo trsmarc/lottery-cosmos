@@ -11,7 +11,8 @@ validators:
     bonded: "100000000stake"
     home: "./docker/validator"
     config:
-      timeout_commit: "300s"
+      moniker: "lottery"
+      timeout_commit: "5m"
     client:
       chain-id: "lottery-1"
       keyring-backend: "test"
