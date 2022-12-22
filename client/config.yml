@@ -1,0 +1,101 @@
+version: 1
+accounts:
+  - name: "client-1"
+    bet-size: 1
+    coins: ["500token", "100000000stake"]
+    mnemonic: "drastic away just dash boy hunt theory just hockey twice bread circle demand educate taste between try keen enjoy assist uncover believe inspire discover"
+  - name: "client-2"
+    coins: ["500token"]
+    bet-size: 2
+    mnemonic: "again pull purity deposit parent craft electric degree load weekend satisfy easily dizzy trick unveil town cram opinion bonus shoe combine deliver zero cradle"
+  - name: client-3
+    bet-size: 3
+    coins: ["500token"]
+    mnemonic: drift similar leisure coin primary almost width base puppy bridge torch tunnel stool purchase help during regular hip amused sure enact crop lecture wife
+  - name: client-4
+    bet-size: 4
+    coins: ["500token"]
+    mnemonic: knock ivory video reflect slush come clap embrace used rural pact almost rate expand repair knee demise wing exotic prevent common toe flash spatial
+  - name: client-5
+    bet-size: 5
+    coins: ["500token"]
+    mnemonic: aim jacket better dizzy lizard answer coyote foster capital sausage draft ranch peace bulb detect gentle fun friend hint burger legal when object drum
+  - name: client-6
+    bet-size: 6
+    coins: ["500token"]
+    mnemonic: teach average film bird camera enter offer segment bridge music dignity security expire width orphan evil tattoo athlete horn goat arrange hole jazz sunny
+  - name: client-7
+    bet-size: 7
+    coins: ["500token"]
+    mnemonic: load town matter scissors umbrella green ensure winner huge similar behind awake lava admit age prison hurdle august rocket one degree harvest cause blouse
+  - name: client-8
+    bet-size: 8
+    coins: ["500token"]
+    mnemonic: such jelly dune phrase anxiety crush ball fish inch matter purpose summer forget armor discover please sorry grunt equal resist bless fire ceiling topic
+  - name: client-9
+    bet-size: 9
+    coins: ["500token"]
+    mnemonic: ecology visual volume defy derive tortoise eternal window disagree core capable later wrong nose trophy evoke celery clinic theory sunny napkin admit earth nose
+  - name: client-10
+    bet-size: 10
+    coins: ["500token"]
+    mnemonic: wonder proof actress urge agree idea top merit agent artist narrow orient pony weapon timber hockey biology job crazy candy lobster sentence release summer
+  - name: client-11
+    bet-size: 11
+    coins: ["500token"]
+    mnemonic: ridge denial message assist feel gadget feed timber space wreck ignore clever twin monster medal voyage industry hazard track maple cloth plunge wood grid
+  - name: client-12
+    bet-size: 12
+    coins: ["500token"]
+    mnemonic: rack private surge multiply badge milk concert frog shy story spot razor oval coral cost honey siege fresh body inspire repair saddle bachelor loud
+  - name: client-13
+    bet-size: 13
+    coins: ["500token"]
+    mnemonic: include attend flock dilemma clap squirrel sponsor armed receive unknown hint glad hip recall bundle ginger helmet coffee soon electric build travel afraid link
+  - name: client-14
+    bet-size: 14
+    coins: ["500token"]
+    mnemonic: merry roast engage chef outer myself humor rough sustain keep element grab virus spirit cricket spot rare affair october blush silent buzz double obtain
+  - name: client-15
+    bet-size: 15
+    coins: ["500token"]
+    mnemonic: leaf crime asthma cluster slight weasel legal already color jaguar cereal climb spoon junior fabric capital common pottery over asset inspire record cook avocado
+  - name: client-16
+    bet-size: 16
+    coins: ["500token"]
+    mnemonic: tongue clarify portion night cruise consider gap cable museum balance slight puzzle manage notice erosion again convince salute friend tiger report cotton bread guitar
+  - name: client-17
+    bet-size: 17
+    coins: ["500token"]
+    mnemonic: scissors silly hero legal glance siege sample cherry resource pencil forward cabbage crash illness clever brick sphere chunk fade day daughter sausage drastic false
+  - name: client-18
+    bet-size: 18
+    coins: ["500token"]
+    mnemonic: scout powder trend sight drive canal again snake involve fade entire disorder hollow poem reduce bullet scare joke apology arena ozone spin capable guard
+  - name: client-19
+    bet-size: 19
+    coins: ["500token"]
+    mnemonic: balance salmon raccoon enhance maze force someone giant decrease taxi word broccoli target limb cereal layer twice erosion fossil balance rude city recall trigger
+  - name: client-20
+    bet-size: 20
+    coins: ["500token"]
+    mnemonic: lunar suspect dirt emotion stereo minimum crumble broken frozen sheriff any casino blade common umbrella volume click glory wheat spy foil easily egg portion
+
+validators:
+  - name: client-1
+    bonded: "100000000stake"
+    home: "./docker/validator"
+    config:
+      moniker: "lottery"
+      timeout_commit: "5m"
+    client:
+      chain-id: "lottery-1"
+      keyring-backend: "test"
+build:
+  binary: "lotteryd"
+  main: "./cmd/lotteryd"
+genesis:
+  chain_id: "lottery-1"
+client:
+  typescript:
+    path: "ts-client"
