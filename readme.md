@@ -34,7 +34,7 @@ Command:
 lotteryd tx lottery buy-lottery <fee> <bet-size> --from <account-name>
 
 Example:
-lotteryd tx lottery buy-lottery 5token 20token --from client1
+lotteryd tx lottery buy-lottery 5token 20token --from client-1
 ```
 
 Query token balance of a client
@@ -44,7 +44,7 @@ Command:
 lotteryd q bank balances $(lotteryd keys show <account-name> -a)
 
 Example:
-lotteryd q bank balances $(lotteryd keys show client1 -a)
+lotteryd q bank balances $(lotteryd keys show client-1 -a)
 ```
 
 Query lottery bet
