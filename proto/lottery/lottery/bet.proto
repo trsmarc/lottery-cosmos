@@ -5,8 +5,6 @@ option go_package = "lottery/x/lottery/types";
 
 message Bet {
   string index = 1; 
-  string betSize = 2; 
-  string betIndex = 3; 
-  string creator = 4;
+  string betSize = 2;  
+  string creator = 3;
 }
-

@@ -3,8 +3,9 @@ package keeper
 import (
 	"context"
 	"encoding/binary"
-	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 	"strconv"
+
+	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	"crypto/sha256"
 
@@ -24,7 +25,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 	var lowestBet sdk.Coins
 	var isProposerIncluded bool
 
-	betIndexes := make(map[string]string, len(bets))
+	betIndexes := make(map[int]string, len(bets))
 	proposerAddr := string(ctx.BlockHeader().ProposerAddress[:])
 
 	for {
@@ -32,7 +33,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 			break
 		}
 
-		for _, bet := range bets {
+		for index, bet := range bets {
 			betTxs += bet.String()
 			if bet.Creator == proposerAddr {
 				isProposerIncluded = true
@@ -49,7 +50,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 				break
 			}
 
-			betIndexes[bet.BetIndex] = bet.Creator
+			betIndexes[index] = bet.Creator
 			betSize, err := sdk.ParseCoinsNormalized(bet.BetSize)
 			if err != nil {
 				panic(err)
@@ -73,7 +74,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 		hashBytes := sha256.Sum256([]byte(betTxs))
 		hashInt := binary.BigEndian.Uint32(hashBytes[:])
 		winnerIndex := int((hashInt ^ 0xFFFF) % txCount)
-		winnerAddr := betIndexes[strconv.Itoa(winnerIndex)]
+		winnerAddr := betIndexes[winnerIndex]
 
 		winner, err := sdk.AccAddressFromBech32(winnerAddr)
 		if err != nil {
@@ -114,7 +115,7 @@ func (k Keeper) SelectLotteryWinner(goCtx context.Context) {
 			}
 		}
 
-		k.SetLotteryRecord(ctx, types.LotteryRecord{
+		k.AppendLotteryRecord(ctx, types.LotteryRecord{
 			WinnerIndex:   winnerIndexStr,
 			WinnerAddress: winnerAddr,
 			WinnerType:    winnerType,

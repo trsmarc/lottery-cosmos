@@ -74,6 +74,13 @@ func TrackMockBalances(bankKeeper *mock.MockBankKeeper) {
 		}).
 		AnyTimes()
 	bankKeeper.EXPECT().
+		BurnCoins(gomock.Any(), minttypes.ModuleName, gomock.Any()).
+		DoAndReturn(func(_ sdk.Context, module string, coins sdk.Coins) error {
+			balances[moduleAcct.String()] = balances[moduleAcct.String()].Sub(coins...)
+			return nil
+		}).
+		AnyTimes()
+	bankKeeper.EXPECT().
 		SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.ModuleName, gomock.Any()).
 		DoAndReturn(func(_ sdk.Context, sender sdk.AccAddress, _ string, coins sdk.Coins) error {
 			newBalance, negative := balances[sender.String()].SafeSub(coins...)

@@ -29,7 +29,6 @@ message MsgCreateBet {
   string index = 2;
 
   string betSize = 3;
-  string betIndex = 4;
 }
 message MsgCreateBetResponse {}
 
@@ -38,7 +37,6 @@ message MsgUpdateBet {
   string index = 2;
 
   string betSize = 3;
-  string betIndex = 4;
 }
 message MsgUpdateBetResponse {}
 

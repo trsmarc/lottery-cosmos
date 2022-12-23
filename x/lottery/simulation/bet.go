@@ -27,17 +27,16 @@ func SimulateMsgCreateBet(
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 
 		i := r.Int()
-		bets := k.GetAllBet(ctx)
+
 		bet, err := sdk.ParseCoinsNormalized(strconv.Itoa(i + 1))
 		if err != nil {
 			return simtypes.NoOpMsg(types.ModuleName, "", "Parsing bet size error"), nil, nil
 		}
 
 		msg := &types.MsgCreateBet{
-			Creator:  simAccount.Address.String(),
-			Index:    strconv.Itoa(i),
-			BetIndex: strconv.Itoa(len(bets)),
-			BetSize:  bet.String(),
+			Creator: simAccount.Address.String(),
+			Index:   strconv.Itoa(i),
+			BetSize: bet.String(),
 		}
 
 		_, found := k.GetBet(ctx, msg.Index)

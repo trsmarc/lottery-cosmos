@@ -8,7 +8,10 @@ import (
 	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 )
 
-func (k msgServer) CreateBet(goCtx context.Context, msg *types.MsgCreateBet) (*types.MsgCreateBetResponse, error) {
+func (k msgServer) CreateBet(
+	goCtx context.Context,
+	msg *types.MsgCreateBet,
+) (*types.MsgCreateBetResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value already exists
@@ -21,10 +24,9 @@ func (k msgServer) CreateBet(goCtx context.Context, msg *types.MsgCreateBet) (*t
 	}
 
 	var bet = types.Bet{
-		Creator:  msg.Creator,
-		Index:    msg.Index,
-		BetSize:  msg.BetSize,
-		BetIndex: msg.BetIndex,
+		Creator: msg.Creator,
+		Index:   msg.Index,
+		BetSize: msg.BetSize,
 	}
 
 	k.SetBet(
@@ -34,7 +36,10 @@ func (k msgServer) CreateBet(goCtx context.Context, msg *types.MsgCreateBet) (*t
 	return &types.MsgCreateBetResponse{}, nil
 }
 
-func (k msgServer) UpdateBet(goCtx context.Context, msg *types.MsgUpdateBet) (*types.MsgUpdateBetResponse, error) {
+func (k msgServer) UpdateBet(
+	goCtx context.Context,
+	msg *types.MsgUpdateBet,
+) (*types.MsgUpdateBetResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
@@ -52,10 +57,9 @@ func (k msgServer) UpdateBet(goCtx context.Context, msg *types.MsgUpdateBet) (*t
 	}
 
 	var bet = types.Bet{
-		Creator:  msg.Creator,
-		Index:    msg.Index,
-		BetSize:  msg.BetSize,
-		BetIndex: msg.BetIndex,
+		Creator: msg.Creator,
+		Index:   msg.Index,
+		BetSize: msg.BetSize,
 	}
 
 	k.SetBet(ctx, bet)
@@ -63,7 +67,10 @@ func (k msgServer) UpdateBet(goCtx context.Context, msg *types.MsgUpdateBet) (*t
 	return &types.MsgUpdateBetResponse{}, nil
 }
 
-func (k msgServer) DeleteBet(goCtx context.Context, msg *types.MsgDeleteBet) (*types.MsgDeleteBetResponse, error) {
+func (k msgServer) DeleteBet(
+	goCtx context.Context,
+	msg *types.MsgDeleteBet,
+) (*types.MsgDeleteBetResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists

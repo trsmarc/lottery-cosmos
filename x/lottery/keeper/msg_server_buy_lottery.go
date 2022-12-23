@@ -2,16 +2,17 @@ package keeper
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/tendermint/tendermint/crypto"
 )
 
-func (k msgServer) BuyLottery(goCtx context.Context, msg *types.MsgBuyLottery) (*types.MsgBuyLotteryResponse, error) {
+func (k msgServer) BuyLottery(
+	goCtx context.Context,
+	msg *types.MsgBuyLottery,
+) (*types.MsgBuyLotteryResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	lotteryFee := sdk.Coins{sdk.NewInt64Coin("token", types.LotteryFee)}
@@ -21,7 +22,12 @@ func (k msgServer) BuyLottery(goCtx context.Context, msg *types.MsgBuyLottery) (
 	}
 
 	if !fee.IsEqual(lotteryFee) {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, types.ErrInvalidLotteryFee.Error(), lotteryFee.String(), fee.String())
+		return nil, sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidRequest,
+			types.ErrInvalidLotteryFee.Error(),
+			lotteryFee.String(),
+			fee.String(),
+		)
 	}
 
 	minBet := sdk.Coins{sdk.NewInt64Coin("token", types.MinimumBet)}
@@ -32,7 +38,13 @@ func (k msgServer) BuyLottery(goCtx context.Context, msg *types.MsgBuyLottery) (
 	}
 
 	if bet.IsAllLT(minBet) || bet.IsAllGT(maxBet) {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, types.ErrInvalidBetSize.Error(), minBet.String(), maxBet.String(), bet.String())
+		return nil, sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidRequest,
+			types.ErrInvalidBetSize.Error(),
+			minBet.String(),
+			maxBet.String(),
+			bet.String(),
+		)
 	}
 
 	buyer, _ := sdk.AccAddressFromBech32(msg.Creator)
@@ -46,8 +58,7 @@ func (k msgServer) BuyLottery(goCtx context.Context, msg *types.MsgBuyLottery) (
 			panic(err)
 		}
 
-		moduleAcct := sdk.AccAddress(crypto.AddressHash([]byte(types.ModuleName)))
-		sdkError := k.bankKeeper.SendCoins(ctx, moduleAcct, buyer, betSize)
+		sdkError := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, buyer, betSize)
 		if sdkError != nil {
 			panic(sdkError)
 		}
@@ -58,13 +69,10 @@ func (k msgServer) BuyLottery(goCtx context.Context, msg *types.MsgBuyLottery) (
 		return nil, err
 	}
 
-	bets := k.GetAllBet(ctx)
-	betIndex := strconv.Itoa(len(bets))
 	newBets := types.Bet{
-		Index:    msg.Creator,
-		Creator:  msg.Creator,
-		BetSize:  bet.String(),
-		BetIndex: betIndex,
+		Index:   msg.Creator,
+		Creator: msg.Creator,
+		BetSize: bet.String(),
 	}
 
 	k.SetBet(ctx, newBets)
@@ -74,7 +82,6 @@ func (k msgServer) BuyLottery(goCtx context.Context, msg *types.MsgBuyLottery) (
 			sdk.NewAttribute(types.BuyLotteryEventBuyer, msg.Creator),
 			sdk.NewAttribute(types.BuyLotteryEventBetSize, msg.BetSize),
 			sdk.NewAttribute(types.BuyLotteryEventBetFee, msg.Fee),
-			sdk.NewAttribute(types.BuyLotteryEventBetIndex, betIndex),
 		),
 	)
 

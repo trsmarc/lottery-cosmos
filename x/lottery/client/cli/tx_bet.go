@@ -4,8 +4,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/spf13/cobra"
 	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
+	"github.com/spf13/cobra"
 )
 
 func CmdCreateBet() *cobra.Command {
@@ -19,7 +19,6 @@ func CmdCreateBet() *cobra.Command {
 
 			// Get value arguments
 			argBetSize := args[1]
-			argBetIndex := args[2]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -30,7 +29,6 @@ func CmdCreateBet() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				indexIndex,
 				argBetSize,
-				argBetIndex,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -55,7 +53,6 @@ func CmdUpdateBet() *cobra.Command {
 
 			// Get value arguments
 			argBetSize := args[1]
-			argBetIndex := args[2]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -66,7 +63,6 @@ func CmdUpdateBet() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				indexIndex,
 				argBetSize,
-				argBetIndex,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

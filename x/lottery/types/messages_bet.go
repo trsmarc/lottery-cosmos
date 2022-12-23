@@ -17,14 +17,12 @@ func NewMsgCreateBet(
 	creator string,
 	index string,
 	betSize string,
-	betIndex string,
 
 ) *MsgCreateBet {
 	return &MsgCreateBet{
-		Creator:  creator,
-		Index:    index,
-		BetSize:  betSize,
-		BetIndex: betIndex,
+		Creator: creator,
+		Index:   index,
+		BetSize: betSize,
 	}
 }
 
@@ -63,14 +61,11 @@ func NewMsgUpdateBet(
 	creator string,
 	index string,
 	betSize string,
-	betIndex string,
-
 ) *MsgUpdateBet {
 	return &MsgUpdateBet{
-		Creator:  creator,
-		Index:    index,
-		BetSize:  betSize,
-		BetIndex: betIndex,
+		Creator: creator,
+		Index:   index,
+		BetSize: betSize,
 	}
 }
 
