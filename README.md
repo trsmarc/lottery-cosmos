@@ -1,4 +1,5 @@
 # Lottery
+![Coverage](https://img.shields.io/badge/Coverage-8.5%25-red)
 
 **Lottery** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
 
