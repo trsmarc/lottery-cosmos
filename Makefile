@@ -11,3 +11,8 @@ do-checksum:
 		> lottery_checksum
 
 build-with-checksum: build-all do-checksum
+
+mock-expected-keepers:
+	mockgen -source=x/lottery/types/expected_keepers.go \
+		-package testutil \
+		-destination=testutil/mocks/expected_keepers_mock.go

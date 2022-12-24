@@ -85,5 +85,5 @@ lotteryd q lottery list-lottery-record
 Generate mocks for keepers
 
 ```
-mockgen -source=x/lottery/types/expected_keepers.go -package testutil -destination testutil/mocks/expected_keepers_mock.go
+make mock-expected-keepers
 ```
