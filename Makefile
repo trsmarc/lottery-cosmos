@@ -1,3 +1,6 @@
+build:
+	go build -o ./build/lotteryd ./cmd/lotteryd/main.go
+
 build-all:
 	GOOS=linux GOARCH=amd64 go build -o ./build/lotteryd-linux-amd64 ./cmd/lotteryd/main.go
 	GOOS=linux GOARCH=arm64 go build -o ./build/lotteryd-linux-arm64 ./cmd/lotteryd/main.go
@@ -12,7 +15,7 @@ do-checksum:
 
 build-with-checksum: build-all do-checksum
 
-mock-expected-keepers:
+mocks:
 	mockgen -source=x/lottery/types/expected_keepers.go \
 		-package testutil \
 		-destination=testutil/mocks/expected_keepers_mock.go

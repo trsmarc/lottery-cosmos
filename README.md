@@ -4,8 +4,7 @@
 
 ## Demo
 
-**Start a local chain**
-Launch the validator-node and client app with docker compose
+**Launch a local chain** with the validator-node and client app using docker compose
 
 ```
  docker compose --project-name lottery-chain-local up -d --build    
@@ -15,6 +14,11 @@ Launch the validator-node and client app with docker compose
 
 Go checkout http://localhost:5173 to start a simulation and use pre-build binary file **lotteryd** command to query current state on network or submit transaction.
 
+**Build executable file**
+```
+make build
+cd build
+```
 
 **Using a pre-build binary file**
 ```
@@ -52,32 +56,32 @@ Buy lottery
 
 ```
 Command:
-lotteryd tx lottery buy-lottery <fee> <bet-size> --from <account-name>
+./lotteryd tx lottery buy-lottery <fee> <bet-size> --from <account-name>
 
 Example:
-lotteryd tx lottery buy-lottery 5token 20token --from client-1
+./lotteryd tx lottery buy-lottery 5token 20token --from client-1
 ```
 
 Query token balance of a client
 
 ```
 Command:
-lotteryd q bank balances $(lotteryd keys show <account-name> -a)
+./lotteryd q bank balances $(./lotteryd keys show <account-name> -a)
 
 Example:
-lotteryd q bank balances $(lotteryd keys show client-1 -a)
+./lotteryd q bank balances $(./lotteryd keys show client-1 -a)
 ```
 
 Query lottery bet
 
 ```
-lotteryd q lottery list-bet
+./lotteryd q lottery list-bet
 ```
 
 Query lottery winner record
 
 ```
-lotteryd q lottery list-lottery-record
+./lotteryd q lottery list-lottery-record
 ```
 
 ## Contribute
@@ -85,5 +89,5 @@ lotteryd q lottery list-lottery-record
 Generate mocks for keepers
 
 ```
-make mock-expected-keepers
+make mocks
 ```
