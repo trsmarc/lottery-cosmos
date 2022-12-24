@@ -1,10 +1,18 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
-import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
-import * as path from "path";
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import * as path from 'path';
 
 export default defineConfig({
+  server: {
+    watch: {
+      usePolling: true,
+    },
+    host: true,
+    strictPort: true,
+    port: 5173,
+  },
   plugins: [
     vue(),
     nodeResolve(),
@@ -14,17 +22,17 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "~bootstrap": path.resolve(__dirname, "node_modules/bootstrap"),
+      '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
     },
   },
   optimizeDeps: {
     include: [
-      "@esbuild-plugins/node-globals-polyfill",
-      "@rollup/plugin-node-resolve",
+      '@esbuild-plugins/node-globals-polyfill',
+      '@rollup/plugin-node-resolve',
     ],
     esbuildOptions: {
       define: {
-        global: "globalThis",
+        global: 'globalThis',
       },
     },
   },

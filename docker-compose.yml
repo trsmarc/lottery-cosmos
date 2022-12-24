@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   lottery_node_validator:
+    build: .
     container_name: lottery_node_validator
     image: "lotteryd_i"
     command: start
@@ -12,3 +13,14 @@ services:
       - "2345:2345"
     volumes:
       - ./docker/validator:/root/.lottery
+  lottery_app:
+    build: 
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: lottery_app
+    image: lottery_app_i
+    ports:
+      - "5173:5173"
+    tty: true
+    depends_on:
+      - lottery_node_validator

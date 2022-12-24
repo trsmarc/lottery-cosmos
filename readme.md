@@ -1,34 +1,55 @@
-# Lottery Chain
-**Lottery chain** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
+# Lottery
 
+**Lottery** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
 
-### Demo
-## 1. Start local chain
-Build node executable file
-```
-docker run --rm -it \
-    -v $(pwd):/lottery \
-    -w /lottery \
-    golang:1.18.7 \
-    make build-with-checksum
-```
+## Demo
 
-Build node image
-```
-docker build -f Dockerfile-ubuntu-prod . -t lotteryd_i
+**Start a local chain**
+Launch the validator-node and client app with docker compose
 
-// verify if build success
-docker run --rm -it lotteryd_i help
 ```
-
-Launch docker compose
-```
-docker compose --project-name lottery-chain-local up
+ docker compose --project-name lottery-chain-local up -d --build    
 ```
 
 ## Usage
 
+Go checkout http://localhost:5173 to start a simulation and use pre-build binary file **lotteryd** command to query current state on network or submit transaction.
+
+
+**Using a pre-build binary file**
+```
+lottery transactions subcommands
+
+Usage:
+  lotteryd tx lottery [flags]
+  lotteryd tx lottery [command]
+
+Available Commands:
+  buy-lottery Broadcast message buy-lottery
+  create-bet  Create a new bet
+  delete-bet  Delete a bet
+  update-bet  Update a bet
+```
+
+```
+Querying commands for the lottery module
+
+Usage:
+  lotteryd query lottery [flags]
+  lotteryd query lottery [command]
+
+Available Commands:
+  list-bet            list all bet
+  list-lottery-record list all lottery-record
+  params              shows the parameters of the module
+  show-bet            shows a bet
+  show-lottery-record shows a lottery-record
+```
+
+**Examples:**
+
 Buy lottery
+
 ```
 Command:
 lotteryd tx lottery buy-lottery <fee> <bet-size> --from <account-name>
@@ -38,8 +59,8 @@ lotteryd tx lottery buy-lottery 5token 20token --from client-1
 ```
 
 Query token balance of a client
-```
 
+```
 Command:
 lotteryd q bank balances $(lotteryd keys show <account-name> -a)
 
@@ -48,11 +69,13 @@ lotteryd q bank balances $(lotteryd keys show client-1 -a)
 ```
 
 Query lottery bet
+
 ```
 lotteryd q lottery list-bet
 ```
 
 Query lottery winner record
+
 ```
 lotteryd q lottery list-lottery-record
 ```
@@ -60,6 +83,7 @@ lotteryd q lottery list-lottery-record
 ## Contribute
 
 Generate mocks for keepers
+
 ```
 mockgen -source=x/lottery/types/expected_keepers.go -package testutil -destination testutil/mocks/expected_keepers_mock.go
 ```

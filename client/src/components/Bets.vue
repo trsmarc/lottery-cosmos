@@ -11,14 +11,12 @@
         <div class="table-row">
           <div class="table-cell text-left font-bold">Address</div>
           <div class="table-cell text-left font-bold">Size</div>
-          <div class="table-cell text-left font-bold">Index</div>
         </div>
       </div>
       <div class="table-row-group">
         <div class="table-row" v-for="(bet, _) in bets">
           <div class="table-cell">{{ bet.creator }}</div>
           <div class="table-cell">{{ bet.betSize }}</div>
-          <div class="table-cell">{{ bet.betIndex }}</div>
         </div>
       </div>
     </div>
@@ -26,8 +24,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
-import { useBetStore } from "../store/bet";
+import { onMounted, computed } from 'vue';
+import { useBetStore } from '../store/bet';
 
 const betStore = useBetStore();
 const bets = computed(() => betStore.bets);

@@ -12,6 +12,7 @@
           <div class="table-cell text-left font-bold">Address</div>
           <div class="table-cell text-left font-bold">Reward</div>
           <div class="table-cell text-left font-bold">Type</div>
+          <div class="table-cell text-left font-bold">Winner Index</div>
         </div>
       </div>
       <div class="table-row-group">
@@ -19,6 +20,7 @@
           <div class="table-cell">{{ record.winnerAddress }}</div>
           <div class="table-cell">{{ record.reward }}</div>
           <div class="table-cell">{{ record.winnerType }}</div>
+          <div class="table-cell">{{ record.winnerIndex }}</div>
         </div>
       </div>
     </div>
@@ -26,11 +28,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
-import { useLotteryRecordStore } from "../store/lottery-record";
+import { onMounted, computed } from 'vue';
+import { useLotteryRecordStore } from '../store/lottery-record';
 
 const lotteryRecordStore = useLotteryRecordStore();
-const lotteryRecords = computed(() => lotteryRecordStore.lotteryRecords)
+const lotteryRecords = computed(() => lotteryRecordStore.lotteryRecords);
 
 onMounted(async () => {
   await lotteryRecordStore.fetchLotteryRecords();

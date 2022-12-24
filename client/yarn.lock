@@ -474,6 +474,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@pgrabovets/json-view@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@pgrabovets/json-view/-/json-view-2.7.1.tgz#306a10955d57c3193a33b788a6322f52bf344a88"
+  integrity sha512-XfmWNyy47GCXmPTgU3ZKiylqt+63MakjAnqKNfyF6u2tY+BtYhqq0eDU4SmddXJ7zNeNZocN+mfiQNENQFUrjA==
+
 "@popperjs/core@^2.11.6":
   version "2.11.6"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"

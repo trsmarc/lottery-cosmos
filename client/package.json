@@ -11,6 +11,7 @@
   "dependencies": {
     "@cosmjs/proto-signing": "^0.29.5",
     "@cosmjs/stargate": "^0.29.5",
+    "@pgrabovets/json-view": "^2.7.1",
     "@popperjs/core": "^2.11.6",
     "js-yaml": "^4.1.0",
     "marktrs-lottery-chain-ignite-client-ts": "../ts-client",
