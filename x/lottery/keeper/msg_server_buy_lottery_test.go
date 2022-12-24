@@ -1,104 +1,148 @@
 package keeper_test
 
 import (
-	test_constant "github.com/marktrs/lottery-chain-ignite/testutil/constants"
-	keeper_test "github.com/marktrs/lottery-chain-ignite/testutil/keeper"
 	"github.com/marktrs/lottery-chain-ignite/x/lottery/types"
-	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	"github.com/stretchr/testify/require"
 )
 
-var (
-	c1 = test_constant.Client1
-)
-
-func TestBuyLottery_Success(t *testing.T) {
-	msgServer, context, bankKeeper := setupMsgServer(t)
-	keeper_test.TrackMockBalances(bankKeeper)
-	ctx := sdk.UnwrapSDKContext(context)
+func (s *KeeperTestSuite) TestBuyLottery_Success() {
+	bets := s.lotteryKeeper.GetAllBet(s.sdkCtx)
+	s.Require().EqualValues(0, len(bets))
 
 	initialCoins := sdk.Coins{sdk.NewInt64Coin("token", 6)}
-	err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, initialCoins)
-	require.NoError(t, err)
+	err := s.bankKeeper.MintCoins(s.sdkCtx, minttypes.ModuleName, initialCoins)
+	s.Require().NoError(err)
 
-	buyer, err := sdk.AccAddressFromBech32(c1)
-	require.NoError(t, err)
+	buyer := accAddrs[0]
+	buyerAddress, err := sdk.AccAddressFromBech32(buyer.String())
+	s.Require().NoError(err)
 
-	err = bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, buyer, initialCoins)
-	require.NoError(t, err)
+	err = s.bankKeeper.SendCoinsFromModuleToAccount(s.sdkCtx, types.ModuleName, buyer, initialCoins)
+	s.Require().NoError(err)
 
-	buyerBalance := bankKeeper.GetAllBalances(ctx, buyer)
-	require.EqualValues(t, buyerBalance.String(), "6token")
+	buyerBalance := s.bankKeeper.GetAllBalances(s.sdkCtx, buyer)
 
-	createResponse, err := msgServer.BuyLottery(context, &types.MsgBuyLottery{
-		Creator: c1,
+	s.Require().EqualValues("6token", buyerBalance.String())
+
+	createResponse, err := s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
 		BetSize: "1token",
 		Fee:     "5token",
 	})
 
-	require.NoError(t, err)
-	require.EqualValues(t, types.MsgBuyLotteryResponse{}, *createResponse)
+	s.Require().NoError(err)
+	s.Require().EqualValues(types.MsgBuyLotteryResponse{}, *createResponse)
 
-	buyerBalance = bankKeeper.GetAllBalances(ctx, buyer)
-	require.EqualValues(t, buyerBalance.String(), "")
+	bets = s.lotteryKeeper.GetAllBet(s.sdkCtx)
+	s.Require().EqualValues(1, len(bets))
+
+	buyerBalance = s.bankKeeper.GetAllBalances(s.sdkCtx, buyer)
+	s.Require().EqualValues("", buyerBalance.String())
 }
 
-func TestBuyLottery_InsufficientFund(t *testing.T) {
-	msgServer, context, bankKeeper := setupMsgServer(t)
-	keeper_test.TrackMockBalances(bankKeeper)
-	ctx := sdk.UnwrapSDKContext(context)
+func (s *KeeperTestSuite) TestBuyLottery_Success_ReEntry() {
+	bets := s.lotteryKeeper.GetAllBet(s.sdkCtx)
+	s.Require().EqualValues(0, len(bets))
 
-	initialCoins := sdk.Coins{sdk.NewInt64Coin("token", 5)}
-	err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, initialCoins)
-	require.NoError(t, err)
+	initialCoins := sdk.Coins{sdk.NewInt64Coin("token", 12)}
+	err := s.bankKeeper.MintCoins(s.sdkCtx, minttypes.ModuleName, initialCoins)
+	s.Require().NoError(err)
 
-	buyer, err := sdk.AccAddressFromBech32(c1)
-	require.NoError(t, err)
+	buyer := accAddrs[0]
+	buyerAddress, err := sdk.AccAddressFromBech32(buyer.String())
+	s.Require().NoError(err)
 
-	err = bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, buyer, initialCoins)
-	require.NoError(t, err)
+	err = s.bankKeeper.SendCoinsFromModuleToAccount(s.sdkCtx, types.ModuleName, buyer, initialCoins)
+	s.Require().NoError(err)
 
-	_, err = msgServer.BuyLottery(context, &types.MsgBuyLottery{
-		Creator: c1,
+	buyerBalance := s.bankKeeper.GetAllBalances(s.sdkCtx, buyer)
+
+	s.Require().EqualValues("12token", buyerBalance.String())
+
+	createResponse, err := s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
 		BetSize: "1token",
 		Fee:     "5token",
 	})
-	require.EqualError(t, err, "not enough balance")
+
+	s.Require().NoError(err)
+	s.Require().EqualValues(types.MsgBuyLotteryResponse{}, *createResponse)
+
+	bets = s.lotteryKeeper.GetAllBet(s.sdkCtx)
+	s.Require().EqualValues(1, len(bets))
+
+	buyerBalance = s.bankKeeper.GetAllBalances(s.sdkCtx, buyer)
+	s.Require().EqualValues("6token", buyerBalance.String())
+
+	createResponse2, err := s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
+		BetSize: "1token",
+		Fee:     "5token",
+	})
+
+	buyerBalance = s.bankKeeper.GetAllBalances(s.sdkCtx, buyer)
+	s.Require().EqualValues(buyerBalance.String(), "1token")
+
+	s.Require().NoError(err)
+	s.Require().EqualValues(types.MsgBuyLotteryResponse{}, *createResponse2)
+
+	bets = s.lotteryKeeper.GetAllBet(s.sdkCtx)
+	s.Require().EqualValues(1, len(bets))
 }
 
-func TestBuyLottery_InsufficientFee(t *testing.T) {
-	msgServer, context, _ := setupMsgServer(t)
-	_, err := msgServer.BuyLottery(context, &types.MsgBuyLottery{
-		Creator: c1,
+func (s *KeeperTestSuite) TestBuyLottery_InsufficientFund() {
+	buyer := accAddrs[0]
+	buyerAddress, err := sdk.AccAddressFromBech32(buyer.String())
+	s.Require().NoError(err)
+
+	_, err = s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
+		BetSize: "1token",
+		Fee:     "5token",
+	})
+	s.Require().EqualError(err, "not enough balance")
+}
+
+func (s *KeeperTestSuite) TestBuyLottery_InsufficientFee() {
+	buyer := accAddrs[0]
+	buyerAddress, err := sdk.AccAddressFromBech32(buyer.String())
+	s.Require().NoError(err)
+
+	_, err = s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
 		BetSize: "1token",
 		Fee:     "4token",
 	})
-	require.EqualError(t, err, "Lottery fee is 5token received 4token: invalid request")
+	s.Require().EqualError(err, "Lottery fee is 5token received 4token: invalid request")
 }
 
-func TestBuyLottery_FailedMinimumBet(t *testing.T) {
-	msgServer, context, _ := setupMsgServer(t)
-	_, err := msgServer.BuyLottery(context, &types.MsgBuyLottery{
-		Creator: c1,
+func (s *KeeperTestSuite) TestBuyLottery_FailedMinimumBet() {
+	buyer := accAddrs[0]
+	buyerAddress, err := sdk.AccAddressFromBech32(buyer.String())
+	s.Require().NoError(err)
+
+	_, err = s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
 		BetSize: "0token",
 		Fee:     "5token",
 	})
-	require.EqualError(t, err, "Bet size can be 1token to 100token received : invalid request")
+	s.Require().EqualError(err, "Bet size can be 1token to 100token received : invalid request")
 }
 
-func TestBuyLottery_FailedMaximumBet(t *testing.T) {
-	msgServer, context, _ := setupMsgServer(t)
-	_, err := msgServer.BuyLottery(context, &types.MsgBuyLottery{
-		Creator: c1,
+func (s *KeeperTestSuite) TestBuyLottery_FailedMaximumBet() {
+	buyer := accAddrs[0]
+	buyerAddress, err := sdk.AccAddressFromBech32(buyer.String())
+	s.Require().NoError(err)
+
+	_, err = s.msgServer.BuyLottery(s.goCtx, &types.MsgBuyLottery{
+		Creator: buyerAddress.String(),
 		BetSize: "101token",
 		Fee:     "5token",
 	})
 
-	require.EqualError(
-		t,
+	s.Require().EqualError(
 		err,
 		"Bet size can be 1token to 100token received 101token: invalid request",
 	)

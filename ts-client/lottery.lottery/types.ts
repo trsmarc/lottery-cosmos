@@ -7,5 +7,4 @@ export {
     Bet,
     LotteryRecord,
     Params,
-    
  }

@@ -6,8 +6,9 @@ release/
 .DS_Store
 
 
-build/
 docker/*/config/addrbook.json
 docker/*/config/write-file-atomic-*
 docker/*/data/*
 !docker/*/data/priv_validator_state.json
+
+node_modules

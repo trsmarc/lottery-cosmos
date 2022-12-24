@@ -8,11 +8,10 @@ const (
 )
 
 const (
-	BuyLotteryEventType     = "buy-lottery"
-	BuyLotteryEventBuyer    = "buyer"
-	BuyLotteryEventBetSize  = "bet-size"
-	BuyLotteryEventBetFee   = "bet-fee"
-	BuyLotteryEventBetIndex = "bet-index"
+	BuyLotteryEventType    = "buy-lottery"
+	BuyLotteryEventBuyer   = "buyer"
+	BuyLotteryEventBetSize = "bet-size"
+	BuyLotteryEventBetFee  = "bet-fee"
 )
 
 const (
