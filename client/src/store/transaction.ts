@@ -6,14 +6,20 @@ import { useBetStore } from './bet';
 import { useLotteryRecordStore } from './lottery-record';
 
 interface TransactionState {
-  transactions: any;
+  blocks: any[];
+  blockPagination: {
+    offset: number;
+  };
   iterationCount: number;
   isSimulating: boolean;
 }
 
 export const useTransactionStore = defineStore('transaction', {
   state: (): TransactionState => ({
-    transactions: [],
+    blocks: [],
+    blockPagination: {
+      offset: 0,
+    },
     iterationCount: 0,
     isSimulating: false,
   }),
@@ -24,7 +30,7 @@ export const useTransactionStore = defineStore('transaction', {
         this.iterationCount >= import.meta.env.VITE_MAX_ITERATION
       )
         return;
-      
+
       this.isSimulating = true;
       const accountStore = useAccountStore();
       const betStore = useBetStore();
@@ -61,7 +67,9 @@ export const useTransactionStore = defineStore('transaction', {
 
         this.iterationCount += 1;
 
-        await Promise.allSettled(promises);
+        const result = await Promise.allSettled(promises);
+        console.log(result);
+
         await betStore.fetchBets();
         await accountStore.fetchAccountBalance();
         await lotteryRecordStore.fetchLotteryRecords();
@@ -69,6 +77,13 @@ export const useTransactionStore = defineStore('transaction', {
 
       this.isSimulating = false;
     },
-    async fetchTransaction() {},
+    async fetchBlocks() {
+      const res = await fetch(import.meta.env.VITE_RPC_URL + '/blockchain', {
+        cache: 'no-store',
+      });
+      const json = await res.json();
+      const blockData = json['result'];
+      this.blocks = blockData.block_metas;
+    },
   },
 });
