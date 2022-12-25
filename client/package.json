@@ -16,6 +16,7 @@
     "js-yaml": "^4.1.0",
     "marktrs-lottery-chain-ignite-client-ts": "../ts-client",
     "pinia": "^2.0.28",
+    "set-interval-async": "^3.0.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {
