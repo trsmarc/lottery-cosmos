@@ -1,9 +1,9 @@
 name: go-coverage-test
 
-on: 
-  push: 
+on:
+  push:
     branches:
-          - main
+      - main
   pull_request:
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
             ${{ runner.os }}-go-
       - name: Run Test
         run: |
-          go test -v ./... -covermode=count -coverprofile=coverage.out
+          go test -v ./x/lottery/keeper -covermode=count -coverprofile=coverage.out
           go tool cover -func=coverage.out -o=coverage.out
       - name: Go Coverage Badge
         uses: tj-actions/coverage-badge-go@v2

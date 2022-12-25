@@ -12,3 +12,4 @@ docker/*/data/*
 !docker/*/data/priv_validator_state.json
 
 node_modules
+coverage.out
