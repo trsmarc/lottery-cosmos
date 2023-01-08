@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
+import { LotteryService, NetworkService } from '../blockchain';
 import { readYamlFile } from '../utils/parser';
-import { LotteryService } from '../blockchain';
 import { useAccountStore } from './account';
 import { useBetStore } from './bet';
 import { useLotteryRecordStore } from './lottery-record';
@@ -12,6 +12,7 @@ interface TransactionState {
   };
   iterationCount: number;
   isSimulating: boolean;
+  isNetworkReady: boolean;
 }
 
 export const useTransactionStore = defineStore('transaction', {
@@ -22,6 +23,7 @@ export const useTransactionStore = defineStore('transaction', {
     },
     iterationCount: 0,
     isSimulating: false,
+    isNetworkReady: false,
   }),
   actions: {
     async startSimulation() {
@@ -43,6 +45,10 @@ export const useTransactionStore = defineStore('transaction', {
       }
 
       for (let index = 0; index < import.meta.env.VITE_MAX_ITERATION; index++) {
+        if (!this.isSimulating) {
+          break;
+        }
+
         const promises = accounts.map(async (account) => {
           console.info('processing', {
             name: account.name,
@@ -62,28 +68,50 @@ export const useTransactionStore = defineStore('transaction', {
               betSize: account['bet-size'],
               error,
             });
+            throw error;
           }
         });
 
-        this.iterationCount += 1;
-
         const result = await Promise.allSettled(promises);
-        console.log(result);
+        const failed = result.filter((re) => re.status === 'rejected');
+        if (failed.length > 0) {
+          alert(
+            'Transactions already exist, Please try again after next block'
+          );
+          break;
+        }
 
         await betStore.fetchBets();
         await accountStore.fetchAccountBalance();
         await lotteryRecordStore.fetchLotteryRecords();
+        this.iterationCount += 1;
       }
 
       this.isSimulating = false;
     },
+    async stopSimulation() {
+      this.isSimulating = false;
+    },
     async fetchBlocks() {
-      const res = await fetch(import.meta.env.VITE_RPC_URL + '/blockchain', {
-        cache: 'no-store',
-      });
-      const json = await res.json();
-      const blockData = json['result'];
+      const client = new NetworkService();
+      const blockData = await client.fetchBlocks();
       this.blocks = blockData.block_metas;
+    },
+    async checkNetworkStatus() {
+      const client = new NetworkService();
+      try {
+        const abci = await client.fetchABCIInfo();
+        const lastBlockNumber = abci['response']['last_block_height'];
+
+        if (lastBlockNumber) {
+          this.isNetworkReady = true;
+        } else {
+          this.isNetworkReady = false;
+        }
+      } catch (error) {
+        this.isNetworkReady = false;
+        console.error(error);
+      }
     },
   },
 });

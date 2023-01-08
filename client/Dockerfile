@@ -3,8 +3,10 @@ FROM node:lts
 COPY ./ts-client/ ./ts-client
 COPY ./client/ ./client
 
-WORKDIR ./client
+WORKDIR ./ts-client
+RUN npm i
 
+WORKDIR ../client
 RUN npm i
 RUN node node_modules/esbuild/install.js
 

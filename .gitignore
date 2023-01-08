@@ -13,3 +13,4 @@ docker/*/data/*
 
 node_modules
 coverage.out
+build/

@@ -8,7 +8,8 @@
 **Launch a local chain** with the validator-node and client app using docker compose
 
 ```
- docker compose --project-name lottery-chain-local up -d --build    
+make build-all
+docker compose --project-name lottery-chain-local up -d --build    
 ```
 
 ## Usage

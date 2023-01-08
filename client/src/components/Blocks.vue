@@ -32,9 +32,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
-import { useTransactionStore } from '../store/transaction';
 import { setIntervalAsync } from 'set-interval-async';
+import { computed, onMounted } from 'vue';
+import { useTransactionStore } from '../store/transaction';
 
 const txStore = useTransactionStore();
 const blocks = computed(() => txStore.blocks);

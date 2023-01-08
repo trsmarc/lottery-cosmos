@@ -1,7 +1,11 @@
-build:
+.PHONY: clean
+clean:
+	\rm -rf build/*
+
+build: clean
 	go build -o ./build/lotteryd ./cmd/lotteryd/main.go
 
-build-all:
+build-all: clean
 	GOOS=linux GOARCH=amd64 go build -o ./build/lotteryd-linux-amd64 ./cmd/lotteryd/main.go
 	GOOS=linux GOARCH=arm64 go build -o ./build/lotteryd-linux-arm64 ./cmd/lotteryd/main.go
 	GOOS=darwin GOARCH=amd64 go build -o ./build/lotteryd-darwin-amd64 ./cmd/lotteryd/main.go
