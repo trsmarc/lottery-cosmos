@@ -38,6 +38,10 @@ export const useTransactionStore = defineStore('transaction', {
       const betStore = useBetStore();
       const lotteryRecordStore = useLotteryRecordStore();
 
+      const accountBalances = new Map(
+        accountStore.$state.accounts.map((acc) => [acc.address, acc.balance])
+      );
+
       const { accounts } = await readYamlFile('../config.yml');
 
       if (!accounts) {
@@ -57,6 +61,14 @@ export const useTransactionStore = defineStore('transaction', {
 
           const client = new LotteryService();
           await client.setup(account.mnemonic);
+
+          const address = await client.getAddress();
+          const balance =
+            accountBalances.get(address)?.replace(' token', '') || 0;
+          if (balance < account['bet-size']) {
+            return;
+          }
+
           try {
             const result = await client.buyLottery(
               parseInt(account['bet-size'])

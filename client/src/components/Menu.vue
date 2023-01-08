@@ -1,14 +1,14 @@
 <template>
   <div class="text-white">
     <div
-      class="container mx-auto lg:items-center lg:flex lg:items-center lg:justify-between lg:py-16"
+      class="container lg:px-auto px-10 mx-auto lg:items-center lg:flex lg:items-center lg:justify-between lg:py-16"
     >
       <h3 class="font-bold tracking-tight sm:text-3xl">
         <span class="block">Lottery Chain Simulation</span>
       </h3>
       <h3 class="font-bold tracking-tight sm:text-3xl">
         <span class="block"
-          >Round : {{ iterationCount }} / {{ maxIteration }}</span
+          >Cycle : {{ iterationCount }} / {{ maxIteration }}</span
         >
       </h3>
       <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
